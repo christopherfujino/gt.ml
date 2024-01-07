@@ -1,0 +1,7 @@
+(library
+ (name gt))
+
+(menhir
+  (modules parser))
+
+(ocamllex lexer)
