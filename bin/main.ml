@@ -3,15 +3,21 @@ open Gt.Main
 let programs =
   [ {|1|}; {|"Hello, world!"|}; {|HEAD|}; {|print("Hello, world!")|} ]
 
-let rec print_programs = function
-  | [] -> ()
-  | h :: t ->
-      let v = parse h in
-      Printf.printf "%25s -> %s\n" h (printer v);
-      print_programs t
+let identifiers =
+  (* random is an optional, named parameter *)
+  let random = false in
+  Hashtbl.create ~random 20
 
-let parsed_programs = List.map parse programs
+let () = Hashtbl.replace identifiers "HEAD" (Commit "deadbeef")
 
-let () = print_programs programs
+let () =
+  Hashtbl.replace identifiers "print"
+    (Function (fun e -> StringValue (expr_to_string e)))
 
-let () = List.iter (interpret {foo = () }) parsed_programs
+let () =
+  List.iter
+    (fun program ->
+      let expr = parse program in
+      Printf.printf "%25s -> %s\n" program (expr_to_string expr);
+      interpret { foo = (); identifiers } expr)
+    programs
