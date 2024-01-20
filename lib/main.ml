@@ -13,7 +13,7 @@ type state = {
   foo : unit
 };;
 
-let rec interpret e state' =
+let interpret state' e =
   match e with
   | Ast.Number _ -> print_endline (printer e)
   | Ast.String _ -> print_endline (printer e)

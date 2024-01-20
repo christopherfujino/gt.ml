@@ -10,4 +10,8 @@ let rec print_programs = function
       Printf.printf "%25s -> %s\n" h (printer v);
       print_programs t
 
+let parsed_programs = List.map parse programs
+
 let () = print_programs programs
+
+let () = List.iter (interpret {foo = () }) parsed_programs
