@@ -1,5 +1,9 @@
 open Gt.Main
+open Gt.Git_foo
 
+let () = log ()
+let () = do_foo ()
+(*
 let programs =
   [ {|1|}; {|"Hello, world!"|}; {|HEAD|}; {|print("Hello, world!")|} ]
 
@@ -21,3 +25,5 @@ let () =
       Printf.printf "%25s -> %s\n" program (expr_to_string expr);
       interpret { foo = (); identifiers } expr)
     programs
+
+*)

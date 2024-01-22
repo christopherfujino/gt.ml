@@ -1,5 +1,7 @@
 (library
- (name gt))
+ (name gt)
+ ; git-unix is from the opam/switch/lib/<NAME>
+ (libraries git-unix))
 
 (menhir
   (modules parser))
