@@ -1,8 +1,15 @@
 open Gt.Main
 open Gt.Git_foo
 
-let () = log ()
-let () = do_foo ()
+exception Foo of string
+
+let () =
+  let log_lwt_result = log () in
+  let log_result = Lwt_main.run log_lwt_result in
+  match log_result with
+  | Ok s -> Printf.printf "Ok %s\n" s
+  | Error e -> raise (Foo "got a Store.error")
+
 (*
 let programs =
   [ {|1|}; {|"Hello, world!"|}; {|HEAD|}; {|print("Hello, world!")|} ]
