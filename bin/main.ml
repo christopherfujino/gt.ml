@@ -1,13 +1,10 @@
 open Gt.Git_foo
 
 let () =
-  let log_lwt_result = log () in
-  let log_result = Lwt_main.run log_lwt_result in
+  let val_p = get_head () in
+  let store_val = Lwt_main.run val_p in
   (* This will throw if not Ok *)
-  let hashes_p = Result.get_ok log_result in
-  let hashes = Lwt_main.run hashes_p in
-  let hashes_s = List.map Store.Hash.to_hex hashes in
-  List.iter print_endline hashes_s
+  Store.Value.digest store_val |> Store.Hash.to_hex |> print_endline
 
 (*
 let programs =
