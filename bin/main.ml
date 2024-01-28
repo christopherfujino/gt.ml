@@ -1,15 +1,13 @@
 open Gt.Git_foo
 
-exception Foo of string
-
 let () =
   let log_lwt_result = log () in
   let log_result = Lwt_main.run log_lwt_result in
-  match log_result with
-  | Ok s ->
-      let hashes = Lwt_main.run s in
-      List.iter (fun rev -> Store.Hash.to_hex rev |> print_endline) hashes
-  | Error _ -> raise (Foo "got a Store.error: %s")
+  (* This will throw if not Ok *)
+  let hashes_p = Result.get_ok log_result in
+  let hashes = Lwt_main.run hashes_p in
+  let hashes_s = List.map Store.Hash.to_hex hashes in
+  List.iter print_endline hashes_s
 
 (*
 let programs =
