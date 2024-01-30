@@ -31,4 +31,7 @@ and get_parent (store_val : Store.hash) : Search.hash option =
   let commit = match store_val with Commit hash -> hash | _ -> raise Foo in
   let parents = Store.Value.Commit.parents commit in
   (* TODO handle multiple parents *)
-  match parents with [] -> None | h :: _ -> Some h
+  match parents with
+  | [] -> None
+  | h :: [] -> Some h
+  | _ :: _ -> raise Foo
