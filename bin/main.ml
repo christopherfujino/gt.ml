@@ -3,8 +3,8 @@ open Gt.Git_foo
 let () =
   let val_p = get_head () in
   let store_val = Lwt_main.run val_p in
-  Store.Value.digest store_val |> Store.Hash.to_hex |> print_endline;
-  get_parent store_val |> Store.Hash.to_hex |> print_endline
+  let head_hash = Store.Value.digest store_val in
+  iter head_hash (fun h -> h |> Store.Hash.to_hex |> print_endline)
 
 (*
 let programs =
