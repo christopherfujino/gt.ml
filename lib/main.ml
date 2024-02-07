@@ -9,11 +9,14 @@ let rec expr_to_string = function
       | v' -> string_of_float v')
   | Ast.String v -> "\"" ^ v ^ "\""
   | Ast.IdentifierRef i -> i
-  | Ast.Invocation (i, e) -> Printf.sprintf "%s(%s)" i (expr_to_string e)
+  | Ast.Invocation (i, es) ->
+      let cb acc cur = acc ^ expr_to_string cur in
+      let concatenated_es = List.fold_left cb "" es in
+      Printf.sprintf "%s(%s)" i concatenated_es
 
 type value =
   | Commit of string
-  | Function of (Ast.expr -> value)
+  | Function of (Ast.expr list -> value)
   | StringValue of string
 
 let value_to_string = function
@@ -21,7 +24,7 @@ let value_to_string = function
   | Function _ -> "function"
   | StringValue s -> s
 
-type state = { foo : unit; identifiers : (string, value) Hashtbl.t }
+type state = { identifiers : (string, value) Hashtbl.t }
 
 let interpret state' e =
   match e with
@@ -33,10 +36,8 @@ let interpret state' e =
       let fun' = Hashtbl.find state'.identifiers id in
       match fun' with
       | Function cb -> cb arg |> value_to_string |> print_endline
-      | _ ->
-          print_string "foo: ";
-          fun' |> value_to_string |> print_endline;
-          raise YoloDawg)
+      | Commit rev -> print_endline rev
+      | StringValue s -> print_endline s)
 
 let rec interpret_program es state' =
   match es with

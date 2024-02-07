@@ -22,4 +22,9 @@ expr:
   | value = NUM        { Number value }
   | value = STRING     { String value }
   | id = IDENTIFIER { IdentifierRef id }
-  | id = IDENTIFIER; OPEN_PAREN ; e = expr ; CLOSE_PAREN { Invocation (id, e) }
+  | id = IDENTIFIER; OPEN_PAREN ; es = args ; CLOSE_PAREN { Invocation (id, es) }
+  | id = IDENTIFIER; OPEN_PAREN ; CLOSE_PAREN { Invocation (id, []) }
+
+args:
+  | e = expr { e :: [] }
+  | { [] }
