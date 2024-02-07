@@ -2,7 +2,9 @@ open Gt.Git_foo
 open Gt.Main
 
 let programs =
-  [ {|1|}; {|"Hello, world!"|}; {|HEAD()|}; {|print("Hello, world!")|} ]
+  [
+    {|1|}; {|"Hello, world!"|}; {|HEAD()|}; {|HEAD|}; {|print("Hello, world!")|};
+  ]
 
 let identifiers =
   (* random is an optional, named parameter *)
