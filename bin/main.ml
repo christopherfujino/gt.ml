@@ -9,7 +9,6 @@ let identifiers =
   let random = false in
   Hashtbl.create ~random 20
 
-(* TODO make this a getter *)
 let () =
   let rev_p = get_head () in
   let rev_value = Lwt_main.run rev_p in

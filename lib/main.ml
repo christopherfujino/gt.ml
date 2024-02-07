@@ -11,6 +11,7 @@ let rec expr_to_string = function
   | Ast.IdentifierRef i -> i
   | Ast.Invocation (i, es) ->
       let cb acc cur = acc ^ expr_to_string cur in
+      (* Is this the right direction? *)
       let concatenated_es = List.fold_left cb "" es in
       Printf.sprintf "%s(%s)" i concatenated_es
 
