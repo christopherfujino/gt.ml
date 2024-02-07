@@ -21,7 +21,7 @@ let () =
 let () =
   Hashtbl.replace identifiers "print"
     (Function
-       (fun (es : Gt.Ast.expr list) ->
+       (fun es ->
          match es with
          | e :: [] -> StringValue (expr_to_string e)
          | _ -> raise Foo));
@@ -31,8 +31,7 @@ let () =
   let hash_str = Store.Hash.to_hex hash in
   Hashtbl.replace identifiers "HEAD"
     (Function
-       (fun es -> match es with [] -> StringValue hash_str | _ -> raise Foo));
-  ()
+       (fun es -> match es with [] -> StringValue hash_str | _ -> raise Foo))
 
 let () =
   List.iter
