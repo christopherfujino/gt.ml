@@ -33,10 +33,10 @@ let interpret state' e =
   | Ast.String _ -> print_endline (expr_to_string e)
   | Ast.IdentifierRef id ->
       print_endline (value_to_string (Hashtbl.find state'.identifiers id))
-  | Ast.Invocation (id, arg) -> (
+  | Ast.Invocation (id, args) -> (
       let fun' = Hashtbl.find state'.identifiers id in
       match fun' with
-      | Function cb -> cb arg |> value_to_string |> print_endline
+      | Function cb -> cb args |> value_to_string |> print_endline
       | Commit rev -> print_endline rev
       | StringValue s -> print_endline s)
 
