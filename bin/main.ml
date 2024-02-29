@@ -1,5 +1,4 @@
 open Gt.Git_foo
-open Gt.Main
 
 let programs =
   [
@@ -16,14 +15,14 @@ let () =
   let rev_value = Lwt_main.run rev_p in
   let hash = Store.Value.digest rev_value in
   let hash_str = Store.Hash.to_hex hash in
-  Hashtbl.replace identifiers "HEAD" (Commit hash_str)
+  Hashtbl.replace identifiers "HEAD" (Gt.Interpreter.Commit hash_str)
 
 let () =
   Hashtbl.replace identifiers "print"
     (Function
        (fun es ->
          match es with
-         | e :: [] -> StringValue (expr_to_string e)
+         | e :: [] -> StringValue (Gt.Interpreter.expr_to_string e)
          | _ -> raise Foo));
   let rev_p = get_head () in
   let rev_value = Lwt_main.run rev_p in
@@ -36,8 +35,9 @@ let () =
 let () =
   List.iter
     (fun program ->
-      let expr = parse program in
+      let expr = Gt.Main.parse program in
       Printf.printf "%s\n" program;
+      let open Gt.Interpreter in
       interpret { identifiers } expr;
       print_endline "")
     programs
