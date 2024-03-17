@@ -26,6 +26,7 @@ rule read =
   | identifier { IDENTIFIER (Lexing.lexeme lexbuf)}
   | '('       { OPEN_PAREN }
   | ')'       { CLOSE_PAREN }
+  | '.'       { DOT }
   (*
   | ','       { COMMA }
   | '['       { OPEN_BRACKET }

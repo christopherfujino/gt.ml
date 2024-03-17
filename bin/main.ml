@@ -4,7 +4,12 @@ open Git_foo
 
 let programs =
   [
-    {|1|}; {|"Hello, world!"|}; {|HEAD()|}; {|HEAD|}; {|print("Hello, world!")|};
+    {|1|};
+    {|"Hello, world!"|};
+    {|HEAD()|};
+    {|HEAD().date()|};
+    {|HEAD|};
+    {|print("Hello, world!")|};
   ]
 
 let identifiers =
@@ -40,6 +45,5 @@ let () =
       let expr = parse program in
       Printf.printf "%s\n" program;
       let open Interpreter in
-      interpret { identifiers } expr;
-      print_endline "")
+      interpret { identifiers } expr |> value_to_string |> print_endline)
     programs

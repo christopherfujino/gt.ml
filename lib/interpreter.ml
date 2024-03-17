@@ -1,25 +1,31 @@
-(** Runtime values. *)
 type value =
-  [ `Commit of string | `Function of Ast.t list -> value | `String of string ]
+  [ `Commit of string
+  | `Function of Ast.t list -> value
+  | `String of string
+  | `Number of float ]
+(** Runtime values. *)
 
 type state = { identifiers : (string, value) Hashtbl.t }
 
-let value_to_string v =
+let value_to_string (v : value) =
   match v with
   | `Commit rev -> rev
   | `Function _ -> "function"
   | `String s -> s
+  | `Number n -> Float.to_string n
 
-let interpret state' e =
-  let open Ast in
+let rec interpret state' (e : Ast.t) : value =
   match e with
-  | Number _ -> print_endline (to_string e)
-  | String _ -> print_endline (to_string e)
-  | IdentifierRef id ->
-      print_endline (value_to_string (Hashtbl.find state'.identifiers id))
-  | Invocation (id, args) -> (
+  | `Number n -> `Number n
+  | `String s -> `String s
+  | `IdentifierRef id -> Hashtbl.find state'.identifiers id
+  | `Invocation (id, args) -> (
       let fun' = Hashtbl.find state'.identifiers id in
       match fun' with
-      | `Function cb -> cb args |> value_to_string |> print_endline
-      | `Commit rev -> print_endline rev
-      | `String s -> print_endline s)
+      | `Function cb -> cb args
+      | `Commit _ -> raise Main.YoloDawg
+      | `String _ -> raise Main.YoloDawg
+      | `Number _ -> raise Main.YoloDawg)
+  | `MethodInvocation (target, _, _) ->
+      let _ = interpret state' target in
+      raise (Main.Todo "need to implement methods on types")
