@@ -1,5 +1,5 @@
 %{
-  open Ast
+  (* open statements go here *)
 %}
 
 (* Declarations *)
@@ -11,7 +11,7 @@
 %token OPEN_PAREN
 %token CLOSE_PAREN
 
-%start <expr> program
+%start <Ast.t> program
 
 %%
 
