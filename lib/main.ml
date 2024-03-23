@@ -1,5 +1,7 @@
 let parse input = (Parser.program Lexer.read) (Lexing.from_string input)
 
-exception YoloDawg
+exception YoloDawg of string
 
-exception Todo of string
+exception Unreachable
+
+exception Todo

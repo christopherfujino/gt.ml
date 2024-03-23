@@ -5,6 +5,14 @@ type value =
   | String of string
   | Number of float
 
+let fields v =
+  let open Main in
+  match v with
+  | Commit _ -> raise Todo
+  | Function _ -> raise Todo
+  | String _ -> raise Todo
+  | Number _ -> raise Todo
+
 type state = { identifiers : (string, value) Hashtbl.t }
 
 let value_to_string (v : value) =
@@ -21,11 +29,12 @@ let rec interpret state' e =
   | Ast.IdentifierRef id -> Hashtbl.find state'.identifiers id
   | Ast.Invocation (id, args) -> (
       let fun' = Hashtbl.find state'.identifiers id in
+      let open Main in
       match fun' with
       | Function cb -> cb args
-      | Commit _ -> raise Main.YoloDawg
-      | String _ -> raise Main.YoloDawg
-      | Number _ -> raise Main.YoloDawg)
-  | Ast.MethodInvocation (target, _, _) ->
-      let _ = interpret state' target in
-      raise (Main.Todo "need to implement methods on types")
+      | Commit _ -> raise Todo
+      | String _ -> raise Todo
+      | Number _ -> raise Todo)
+  | Ast.MethodInvocation (ast_target, _, _) ->
+      let _ = interpret state' ast_target in
+      raise Main.Todo
