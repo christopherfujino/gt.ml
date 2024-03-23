@@ -22,22 +22,22 @@ let () =
   let rev_value = Lwt_main.run rev_p in
   let hash = Store.Value.digest rev_value in
   let hash_str = Store.Hash.to_hex hash in
-  Hashtbl.replace identifiers "HEAD" (`Commit hash_str)
+  Hashtbl.replace identifiers "HEAD" (Interpreter.Commit hash_str)
 
 let () =
   Hashtbl.replace identifiers "print"
-    (`Function
+    (Interpreter.Function
       (fun es ->
         match es with
-        | e :: [] -> `String (Ast.to_string e)
+        | e :: [] -> String (Ast.to_string e)
         | _ -> raise YoloDawg));
   let rev_p = get_head () in
   let rev_value = Lwt_main.run rev_p in
   let hash = Store.Value.digest rev_value in
   let hash_str = Store.Hash.to_hex hash in
   Hashtbl.replace identifiers "HEAD"
-    (`Function
-      (fun es -> match es with [] -> `String hash_str | _ -> raise YoloDawg))
+    (Function
+      (fun es -> match es with [] -> String hash_str | _ -> raise YoloDawg))
 
 let () =
   List.iter
