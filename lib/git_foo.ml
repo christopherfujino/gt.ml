@@ -8,7 +8,7 @@ let store =
   let store_res = Lwt_main.run store_p in
   Result.get_ok store_res
 
-let get_head () : Store.Value.t Lwt.t =
+let get_head_async () : Store.Value.t Lwt.t =
   let open Lwt_result.Syntax in
   (* get store located in current root's .git folder *)
   let store_val =
@@ -18,6 +18,10 @@ let get_head () : Store.Value.t Lwt.t =
   in
   (* This will throw if not Ok *)
   Lwt.map Result.get_ok store_val
+
+let get_head () =
+  let rev_p = get_head_async () in
+  Lwt_main.run rev_p
 
 let rec iter store_val f =
   f store_val;

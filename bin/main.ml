@@ -18,27 +18,18 @@ let identifiers =
   Hashtbl.create ~random 20
 
 let () =
-  let rev_p = get_head () in
-  let rev_value = Lwt_main.run rev_p in
-  let hash = Store.Value.digest rev_value in
-  let hash_str = Store.Hash.to_hex hash in
-  Hashtbl.replace identifiers "HEAD" (Interpreter.Commit hash_str)
-
-let () =
   Hashtbl.replace identifiers "print"
-    (Interpreter.Function
+    (Runtime.Function
        (fun es ->
          match es with
          | e :: [] -> String (Ast.to_string e)
          | _ -> raise Unreachable));
-  let rev_p = get_head () in
-  let rev_value = Lwt_main.run rev_p in
-  let hash = Store.Value.digest rev_value in
-  let hash_str = Store.Hash.to_hex hash in
   Hashtbl.replace identifiers "HEAD"
     (Function
        (fun es ->
-         match es with [] -> String hash_str | _ -> raise Unreachable))
+         match es with
+         | [] -> Commit (() |> get_head |> Commit_runtime.init)
+         | _ -> raise (YoloDawg "wrong number of arguments")))
 
 let () =
   List.iter
@@ -46,5 +37,5 @@ let () =
       let expr = parse program in
       Printf.printf "%s\n" program;
       let open Interpreter in
-      interpret { identifiers } expr |> value_to_string |> print_endline)
+      interpret { identifiers } expr |> Runtime.to_string |> print_endline)
     programs
