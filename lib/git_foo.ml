@@ -1,12 +1,31 @@
 open Main
 
+(** A SHA-1 based unix filesystem git store *)
 module Store = Git_unix.Store
+
+(** A search module based on SHA-1 digests and our [Store] *)
 module Search = Git.Search.Make (Digestif.SHA1) (Store)
 
 let store =
   let store_p = Store.v (Fpath.v (Sys.getcwd ())) in
   let store_res = Lwt_main.run store_p in
   Result.get_ok store_res
+
+(** This is just a test *)
+let () =
+  let hash_res_p = Store.Ref.resolve store Git.Reference.head in
+  let store_val_res_p = Lwt_result.bind hash_res_p (Store.read store) in
+  let store_val_res = Lwt_main.run store_val_res_p in
+  let store_val = Result.get_ok store_val_res in
+  Store.Value.pp Format.std_formatter store_val;
+  print_endline "";
+  match store_val with
+  | Commit c -> begin
+    let committer = Store.Value.Commit.committer c in
+    let unix_time, _ = committer.date in
+    Printf.printf "commit time was %s" (Int64.to_string unix_time)
+  end
+  | _ -> raise Unreachable
 
 let get_head_async () : Store.Value.t Lwt.t =
   let open Lwt_result.Syntax in
