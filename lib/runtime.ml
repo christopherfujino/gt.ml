@@ -47,7 +47,6 @@ type t =
 
 let rec to_string (v : t) : string =
   match v with
-  (* TODO *)
   | `Commit c ->
       let date = `Date c.committer.date in
       Printf.sprintf "%s at %s" c.committer.name (to_string date)
