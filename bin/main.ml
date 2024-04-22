@@ -19,24 +19,27 @@ let identifiers =
     Hashtbl.create ~random 20
   in
   Hashtbl.replace identifiers' "print"
-    (Runtime.Function
-       (fun es ->
-         match es with
-         | e :: [] -> String (Ast.to_string e)
-         | _ -> raise Unreachable));
+    (`Function
+      (fun es ->
+        match es with
+        | e :: [] -> `String (Ast.to_string e)
+        | _ -> raise Unreachable));
   Hashtbl.replace identifiers' "HEAD"
-    (Function
-       (fun es ->
-         match es with
-         | [] -> Commit (() |> get_head |> Runtime.Commit.of_store_value)
-         | _ -> raise (YoloDawg "wrong number of arguments")));
+    (`Function
+      (fun es ->
+        match es with
+        | [] ->
+            let head = get_head () in
+            let commit = Runtime.Commit.of_store_value head in
+            `Commit commit
+        | _ -> raise (YoloDawg "wrong number of arguments")));
   identifiers'
 
 let () =
   List.iter
     (fun program ->
       let expr = parse program in
-      Printf.printf "%s\n" program;
+      print_endline program;
       let open Interpreter in
       interpret { identifiers } expr |> Runtime.to_string |> print_endline)
     programs

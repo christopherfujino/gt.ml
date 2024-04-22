@@ -29,25 +29,32 @@ module Commit = struct
     | Tree _ -> raise Unreachable
     | Tag _ -> raise Unreachable
 
+  let get_method receiver func_name =
+    match func_name with
+    | "revision" -> fun _ -> `String receiver.revision
+    | "date" -> fun _ -> `Date receiver.committer.date
+    | _ -> raise (YoloDawg func_name)
 end
 
+(* This must be polymorphic since there exists a circuluar dependency between
+   this and the Commit submodule. *)
 type t =
-  | Commit of Commit.t
-  | Function of (Ast.t list -> t)
-  | String of string
-  | Number of float
-  | Date of Unix.tm
+  [ `Commit of Commit.t
+  | `Function of Ast.t list -> t
+  | `String of string
+  | `Number of float
+  | `Date of Unix.tm ]
 
 let rec to_string (v : t) : string =
   match v with
   (* TODO *)
-  | Commit c ->
-      let date = Date c.committer.date in
+  | `Commit c ->
+      let date = `Date c.committer.date in
       Printf.sprintf "%s at %s" c.committer.name (to_string date)
-  | Function _ -> "function"
-  | String s -> "\"" ^ s ^ "\""
-  | Number n -> Float.to_string n
-  | Date tm ->
+  | `Function _ -> "function"
+  | `String s -> "\"" ^ s ^ "\""
+  | `Number n -> Float.to_string n
+  | `Date tm ->
       let month =
         match tm.tm_mon with
         | 0 -> "Jan"
