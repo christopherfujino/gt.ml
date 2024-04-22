@@ -1,5 +1,7 @@
 (** Runtime values. *)
 
+open Common
+
 module Commit = struct
   module User = struct
     type t = {
@@ -14,6 +16,19 @@ module Commit = struct
   end
 
   type t = { committer : User.t; revision : string }
+
+  let of_store_value store_value =
+    let open Git_foo in
+    let hash = Store.Value.digest store_value in
+    let hash_str = Store.Hash.to_hex hash in
+    match store_value with
+    | Commit c ->
+        let committer = Store.Value.Commit.committer c in
+        { committer = User.of_git_user committer; revision = hash_str }
+    | Blob _ -> raise Unreachable
+    | Tree _ -> raise Unreachable
+    | Tag _ -> raise Unreachable
+
 end
 
 type t =
@@ -47,7 +62,7 @@ let rec to_string (v : t) : string =
         | 9 -> "Oct"
         | 10 -> "Nov"
         | 11 -> "Dec"
-        | _ -> raise Main.Unreachable
+        | _ -> raise Unreachable
       in
       let day = tm.tm_mday in
       let year = tm.tm_year + 1900 in

@@ -1,5 +1,5 @@
 open Gt
-open Main
+open Common
 open Git_foo
 
 let programs =
@@ -12,12 +12,12 @@ let programs =
     {|print("Hello, world!")|};
   ]
 
-let identifiers =
-  (* random is an optional, named parameter *)
-  let random = false in
-  Hashtbl.create ~random 20
-
 let () =
+  let identifiers =
+    (* random is an optional, named parameter *)
+    let random = false in
+    Hashtbl.create ~random 20
+  in
   Hashtbl.replace identifiers "print"
     (Runtime.Function
        (fun es ->
@@ -29,9 +29,7 @@ let () =
        (fun es ->
          match es with
          | [] -> Commit (() |> get_head |> Commit_runtime.commit_of_store_value)
-         | _ -> raise (YoloDawg "wrong number of arguments")))
-
-let () =
+         | _ -> raise (YoloDawg "wrong number of arguments")));
   List.iter
     (fun program ->
       let expr = parse program in

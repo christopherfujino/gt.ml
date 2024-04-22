@@ -1,4 +1,4 @@
-open Main
+open Common
 
 module Store = Git_unix.Store
 (** A SHA-1 based unix filesystem git store *)

@@ -1,4 +1,4 @@
-open Main
+open Common
 
 let commit_of_store_value store_value =
   let open Git_foo in
