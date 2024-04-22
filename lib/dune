@@ -4,6 +4,6 @@
  (libraries git-unix))
 
 (menhir
-  (modules parser))
+ (modules parser))
 
 (ocamllex lexer)

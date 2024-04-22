@@ -1,10 +1,10 @@
 open Main
 
-(** A SHA-1 based unix filesystem git store *)
 module Store = Git_unix.Store
+(** A SHA-1 based unix filesystem git store *)
 
-(** A search module based on SHA-1 digests and our [Store] *)
 module Search = Git.Search.Make (Digestif.SHA1) (Store)
+(** A search module based on SHA-1 digests and our [Store] *)
 
 let store =
   let store_p = Store.v (Fpath.v (Sys.getcwd ())) in
@@ -20,11 +20,10 @@ let () =
   Store.Value.pp Format.std_formatter store_val;
   print_endline "";
   match store_val with
-  | Commit c -> begin
-    let committer = Store.Value.Commit.committer c in
-    let unix_time, _ = committer.date in
-    Printf.printf "commit time was %s" (Int64.to_string unix_time)
-  end
+  | Commit c ->
+      let committer = Store.Value.Commit.committer c in
+      let unix_time, _ = committer.date in
+      Printf.printf "commit time was %s" (Int64.to_string unix_time)
   | _ -> raise Unreachable
 
 let get_head_async () : Store.Value.t Lwt.t =
@@ -51,12 +50,9 @@ and get_parent (store_val : Store.hash) : Search.hash option =
   let val_res_prom = Store.read store store_val in
   let val_res = Lwt_main.run val_res_prom in
   let store_val = Result.get_ok val_res in
-  let commit = match store_val with
-  | Commit hash -> hash
-  | _ -> raise Unreachable in
+  let commit =
+    match store_val with Commit hash -> hash | _ -> raise Unreachable
+  in
   let parents = Store.Value.Commit.parents commit in
   (* TODO handle multiple parents *)
-  match parents with
-  | [] -> None
-  | h :: [] -> Some h
-  | _ :: _ -> raise Todo
+  match parents with [] -> None | h :: [] -> Some h | _ :: _ -> raise Todo

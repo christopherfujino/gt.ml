@@ -3,8 +3,7 @@ type t =
   | String of string
   | Invocation of string * t list
   | IdentifierRef of string
-  | MethodInvocation of t * string * t list
-(** Parser AST node type. *)
+  | MethodInvocation of t * string * t list  (** Parser AST node type. *)
 
 let rec to_string = function
   | Number v -> (
