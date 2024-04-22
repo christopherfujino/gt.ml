@@ -28,7 +28,7 @@ let identifiers =
     (Function
        (fun es ->
          match es with
-         | [] -> Commit (() |> get_head |> Commit_runtime.commit_of_store_value)
+         | [] -> Commit (() |> get_head |> Runtime.Commit.of_store_value)
          | _ -> raise (YoloDawg "wrong number of arguments")));
   identifiers'
 
