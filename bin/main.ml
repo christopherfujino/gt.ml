@@ -28,7 +28,7 @@ let () =
     (Function
        (fun es ->
          match es with
-         | [] -> Commit (() |> get_head |> Commit_runtime.init)
+         | [] -> Commit (() |> get_head |> Commit_runtime.commit_of_store_value)
          | _ -> raise (YoloDawg "wrong number of arguments")))
 
 let () =
