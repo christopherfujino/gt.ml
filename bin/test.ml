@@ -2,6 +2,16 @@ open Gt
 open Common
 open Git_foo
 
+let programs =
+  [
+    {|1|};
+    {|"Hello, world!"|};
+    {|HEAD()|};
+    {|HEAD().date()|};
+    {|HEAD|};
+    {|print("Hello, world!")|};
+  ]
+
 let identifiers =
   let identifiers' =
     (* random is an optional, named parameter *)
@@ -26,10 +36,9 @@ let identifiers =
   identifiers'
 
 let () =
-  let program_opt = try Some (read_line ()) with End_of_file -> None in
-  match program_opt with
-  | Some program ->
+  List.iter
+    (fun program ->
       let expr = parse program in
-      Interpreter.interpret { identifiers } expr
-      |> Runtime.to_string |> print_endline
-  | None -> ()
+      print_endline program;
+      Interpreter.interpret { identifiers } expr |> Runtime.to_string |> print_endline)
+    programs

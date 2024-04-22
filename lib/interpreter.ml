@@ -1,13 +1,5 @@
 open Common
 
-let fields v =
-  match v with
-  | `Commit _ -> raise Todo
-  | `Function _ -> raise Todo
-  | `String _ -> raise Todo
-  | `Number _ -> raise Todo
-  | `Date _ -> raise Todo
-
 type state = { identifiers : (string, Runtime.t) Hashtbl.t }
 
 let rec interpret state' e =

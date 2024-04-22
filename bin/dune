@@ -1,4 +1,4 @@
-(executable
- (public_name gt)
- (name main)
+(executables
+ (public_names test gt)
+ (names test main)
  (libraries gt))
