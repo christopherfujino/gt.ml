@@ -16,5 +16,6 @@ let commit_of_store_value store_value =
 let stdlib commit func_name =
   let open Runtime.Commit in
   match func_name with
-  | "hash" -> fun _ -> Runtime.String commit.revision
+  | "revision" -> fun _ -> Runtime.String commit.revision
+  | "date" -> fun _ -> Runtime.Date commit.committer.date
   | _ -> raise (YoloDawg func_name)

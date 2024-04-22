@@ -7,6 +7,7 @@ let fields v =
   | Function _ -> raise Todo
   | String _ -> raise Todo
   | Number _ -> raise Todo
+  | Date _ -> raise Todo
 
 type state = { identifiers : (string, Runtime.t) Hashtbl.t }
 
@@ -21,7 +22,8 @@ let rec interpret state' e =
       | Runtime.Function cb -> cb args
       | Runtime.Commit _ -> raise Todo
       | Runtime.String _ -> raise Todo
-      | Runtime.Number _ -> raise Todo)
+      | Runtime.Number _ -> raise Todo
+      | Runtime.Date _ -> raise Todo)
   | Ast.MethodInvocation (ast_target, field_name, args) -> (
       let target = interpret state' ast_target in
       match target with
@@ -30,4 +32,5 @@ let rec interpret state' e =
           cb args
       | Function _ -> raise Todo
       | String _ -> raise Todo
-      | Number _ -> raise Todo)
+      | Number _ -> raise Todo
+      | Date _ -> raise Todo)
