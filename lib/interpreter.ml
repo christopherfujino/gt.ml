@@ -1,5 +1,6 @@
 open Common
 
+(* TODO make mutable *)
 type state = { identifiers : (string, Runtime.t) Hashtbl.t }
 
 let rec interpret state' e =
