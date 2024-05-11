@@ -17,5 +17,6 @@ let () =
       let expr = parse program in
       print_endline program;
       let open Gt_stdlib in
-      Interpreter.interpret { identifiers } expr |> Runtime.to_string |> print_endline)
+      Interpreter.interpret { identifiers } expr
+      |> Runtime.to_string |> print_endline)
     programs

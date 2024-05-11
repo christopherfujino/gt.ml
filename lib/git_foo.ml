@@ -11,7 +11,7 @@ let store =
   let store_res = Lwt_main.run store_p in
   Result.get_ok store_res
 
-let get_head_async () : Store.Value.t Lwt.t =
+let get_head_async () =
   let open Lwt_result.Syntax in
   (* get store located in current root's .git folder *)
   let store_val =
