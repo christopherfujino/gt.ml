@@ -1,0 +1,22 @@
+name: Analysis
+run-name: Analysis
+on: [push]
+jobs:
+  Analysis:
+    runs-on: ubuntu-latest
+    env:
+      SWITCH_NAME: 'foo'
+      # https://github.com/ocaml/ocaml/tags
+      SWITCH_VERSION: '5.2.0'
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install opam
+        run: |
+          apt-get install opam
+          opam init
+          opam switch create "$SWITCH_NAME" "$SWITCH_VERSION"
+          # ensure current shell is up to date
+          eval $(opam env --switch="$SWITCH_NAME")
+          dune build .
+
