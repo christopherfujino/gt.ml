@@ -13,7 +13,7 @@ let store =
   let store_res = Lwt_main.run store_p in
   Result.get_ok store_res
 
-let get_head_async () =
+let get_head_async_legacy () =
   let open Lwt_result.Syntax in
   (* get store located in current root's .git folder *)
   let store_val =
@@ -23,6 +23,18 @@ let get_head_async () =
   in
   (* This will throw if not Ok *)
   Lwt.map Result.get_ok store_val
+
+let get_head_async () =
+  failwith (Sys.getcwd ())
+  (*
+  let open Lwt_result.Infix in
+  (* get store located in current root's .git folder *)
+  let store_result =
+    (* find obj-id pointed at by main branch (reference) *)
+    Store.Ref.resolve store Git.Reference.head >>= Store.read store
+  in
+  Lwt.map (function Ok v -> v | Error _ -> failwith "TODO") store_result
+  *)
 
 let get_head () =
   let rev_p = get_head_async () in

@@ -6,6 +6,7 @@ let make_test program expectation =
     let result = Gt.Interpreter.interpret { identifiers = Gt.Gt_stdlib.create () } expr in
     expectation result
 
+    (* Tests fail because they run within a working dir like: //_build/default/test *)
 let suite =
   let tuples =
     [
