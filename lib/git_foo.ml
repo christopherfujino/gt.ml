@@ -6,6 +6,8 @@ module Store = Git_unix.Store
 module Search = Git.Search.Make (Digestif.SHA1) (Store)
 (** A search module based on SHA-1 digests and our [Store] *)
 
+let () = print_endline "Exec the Git_foo module"
+
 let store =
   let store_p = Store.v (Fpath.v (Sys.getcwd ())) in
   let store_res = Lwt_main.run store_p in
