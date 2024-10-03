@@ -1,9 +1,9 @@
 open Common
-open Git_foo
 
 type t = (string, Runtime.t) Hashtbl.t
 
-let create () =
+let create git_foo =
+  let module Git_foo = (val git_foo : Git_foo.Git_type) in
   let identifiers : t =
     (* random is an optional, named parameter *)
     (* TODO: use Hashtbl.of_seq *)
@@ -20,7 +20,7 @@ let create () =
       (fun es ->
         match es with
         | [] ->
-            let head = get_head () in
+            let head = Git_foo.get_head () in
             let commit = Runtime.Commit.of_store_value head in
             `Commit commit
         | _ -> raise (YoloDawg "wrong number of arguments")));
