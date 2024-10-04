@@ -33,7 +33,7 @@ module Make (T : Git_deps) : Git_type = struct
   let get_head () =
     let rev_p = get_head_async () in
     Lwt_main.run rev_p
-(*
+  (*
   let rec iter store_val f =
     f store_val;
     let parent_hash = get_parent store_val in

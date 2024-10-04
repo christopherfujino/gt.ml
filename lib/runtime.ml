@@ -38,13 +38,14 @@ end
 
 (* This must be polymorphic since there exists a circuluar dependency between
    this and the Commit submodule. *)
-(** Runtime values. *)
+
 type t =
   [ `Commit of Commit.t
   | `Function of Ast.t list -> t
   | `String of string
   | `Number of float
   | `Date of Unix.tm ]
+(** Runtime values. *)
 
 let rec to_string (v : t) =
   match v with

@@ -13,12 +13,10 @@ let rec to_string = function
   | String v -> "\"" ^ v ^ "\""
   | IdentifierRef i -> i
   | Invocation (i, es) ->
-      let cb acc cur = acc ^ to_string cur in
-      (* Is this the right direction? *)
+      let cb acc cur = Printf.sprintf "%s%s, " acc (to_string cur) in
       let concatenated_es = List.fold_left cb "" es in
       Printf.sprintf "%s(%s)" i concatenated_es
   | MethodInvocation (target, i, es) ->
-      let cb acc cur = acc ^ to_string cur in
-      (* Is this the right direction? *)
+      let cb acc cur = Printf.sprintf "%s%s, " acc (to_string cur) in
       let concatenated_es = List.fold_left cb "" es in
       Printf.sprintf "%s.%s(%s)" (to_string target) i concatenated_es
