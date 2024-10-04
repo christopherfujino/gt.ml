@@ -47,7 +47,7 @@ let create git_foo =
               match es with
               | [ e ] ->
                   let contents =
-                    match e with String s -> s | any -> Ast.to_string any
+                    match e with Ast.String s -> s | any -> Ast.to_string any
                   in
                   `String contents
               | _ -> raise Unreachable) );
