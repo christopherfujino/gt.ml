@@ -15,8 +15,10 @@ let rec interpret state' e =
       | `Commit _ -> raise Todo
       | `String _ -> raise Todo
       | `Number _ -> raise Todo
-      | `Date _ -> raise Todo)
+      | `Date _ -> raise Todo
+      | `Void -> raise Todo)
   | Ast.MethodInvocation (ast_target, field_name, args) -> (
+      let args = List.map (interpret state') args in
       let target = interpret state' ast_target in
       match target with
       | `Commit c ->
@@ -25,4 +27,5 @@ let rec interpret state' e =
       | `Function _ -> raise Todo
       | `String _ -> raise Todo
       | `Number _ -> raise Todo
-      | `Date _ -> raise Todo)
+      | `Date _ -> raise Todo
+      | `Void -> raise Todo)

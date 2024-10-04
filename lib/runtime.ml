@@ -38,13 +38,13 @@ end
 
 (* This must be polymorphic since there exists a circuluar dependency between
    this and the Commit submodule. *)
-
 type t =
   [ `Commit of Commit.t
   | `Function of Ast.t list -> t
   | `String of string
   | `Number of float
-  | `Date of Unix.tm ]
+  | `Date of Unix.tm
+  | `Void ]
 (** Runtime values. *)
 
 let rec to_string (v : t) =
@@ -75,3 +75,4 @@ let rec to_string (v : t) =
       let day = tm.tm_mday in
       let year = tm.tm_year + 1900 in
       Printf.sprintf "%s %d, %d" month day year
+  | `Void -> "void"
