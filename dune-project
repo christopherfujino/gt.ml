@@ -1,7 +1,7 @@
-(lang dune 3.12)
+(lang dune 3.13)
 
 (name gt)
-(using menhir 2.1)
+(using menhir 3.0)
 
 (generate_opam_files true)
 

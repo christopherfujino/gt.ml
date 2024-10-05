@@ -24,9 +24,9 @@ expr:
   | value = STRING     { String value }
   | id = IDENTIFIER { IdentifierRef id }
   | id = IDENTIFIER; OPEN_PAREN ; es = args ; CLOSE_PAREN { Invocation (id, es) }
-  | id = IDENTIFIER; OPEN_PAREN ; CLOSE_PAREN { Invocation (id, []) }
   | e = expr; DOT; id = IDENTIFIER; OPEN_PAREN; CLOSE_PAREN { MethodInvocation (e, id, []) }
 
 args:
-  | e = expr { e :: [] }
   | { [] }
+  | e = expr { e :: [] }
+  | a = args ; COMMA ; e = expr { a @ [e] }
